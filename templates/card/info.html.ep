@@ -1,0 +1,11 @@
+% layout 'default';
+% title 'Card Info';
+
+<img id='card_img' src='<%= $image_path %>'/>
+<br/>
+<br/>
+<form id='card_form' name='card_form' method='GET'>
+    Name: <input type='text' name='card_name' value='<%= $card_name %>'/><br/>
+    Description: <input type='textarea' name='card_description' value='<%= $card_description %>'/></br>
+    Flavor Text: <input type='textarea' name='card_flavor' value='<%= $card_flavor %>'/></br>
+</form>
