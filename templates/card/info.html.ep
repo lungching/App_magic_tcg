@@ -6,6 +6,6 @@
 <br/>
 <form id='card_form' name='card_form' method='GET'>
     Name: <input type='text' name='card_name' value='<%= $card_name %>'/><br/>
-    Description: <input type='textarea' name='card_description' value='<%= $card_description %>'/></br>
-    Flavor Text: <input type='textarea' name='card_flavor' value='<%= $card_flavor %>'/></br>
+    Description: <textarea name='card_description'><%= $card_description %></textarea></br>
+    Flavor Text: <textarea name='card_flavor'><%= $card_flavor %></textarea></br>
 </form>
