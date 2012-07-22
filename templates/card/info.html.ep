@@ -1,11 +1,14 @@
 % layout 'default';
 % title 'Card Info';
 
-<img id='card_img' src='<%= $image_path %>'/>
+<img id="card_img" src="<%= $image_path %>"/>
 <br/>
 <br/>
-<form id='card_form' name='card_form' method='GET'>
-    Name: <input type='text' name='card_name' value='<%= $card_name %>'/><br/>
-    Description: <textarea name='card_description'><%= $card_description %></textarea></br>
-    Flavor Text: <textarea name='card_flavor'><%= $card_flavor %></textarea></br>
+<form id="card_form" name="card_form" method="GET">
+    Name: <input type="text" name="card_name" value="<%= $card_name %>"/><br/>
+    Description: <textarea name="card_description"><%= $card_description %></textarea></br>
+    Flavor Text: <textarea name="card_flavor"><%= $card_flavor %></textarea></br>
+    Type: <input type="text" name="type" value="<%= $type %>"/> - Subtype: <input type="text" name="subtype" value="<%= $subtype %>"/> Power/Toughness: <input type="text" name="power" value="<%= $power %>"/>/<input type="text" name="toughness" value="<%= $toughness %>"/><br/>
+    Mana: <input type="text" name="mana" value="<%= $mana %>"/><br/>
+    Converted Mana: <input type="text" name="converted_mana" value="<%= $converted_mana %>"/><br/>
 </form>

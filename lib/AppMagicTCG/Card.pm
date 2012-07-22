@@ -21,6 +21,12 @@ sub info {
         card_description => $info->{description},
         card_flavor      => $info->{flavor},
         image_path       => $info->{image_path},
+        type             => $info->{type},
+        subtype          => $info->{subtype},
+        mana             => $info->{general_mana} . $info->{specific_mana},
+        converted_mana   => $info->{converted_mana},
+        power            => $info->{power},
+        toughness        => $info->{toughness},
     );
 
     $self->render();

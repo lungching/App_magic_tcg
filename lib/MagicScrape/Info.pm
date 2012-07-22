@@ -37,12 +37,29 @@ sub get_general_info {
     my $container   = $agent->find('html body table')->[3]->find('tr td')->[1];
     my $description = $container->find('p')->[1]->find('b')->[0]->text;
     my $flavor      = $container->find('p')->[2]->find('i')->[0]->text;
+    my $meta = $container->find('p')->[0]->text;
+
+    # E.G. - Creature — Beast 5/5, 5GGG (8)
+    my ($type, $subtype, $general_mana, $specific_mana, $converted_mana) = $meta =~ /^(\w+)(?: . )?([^,]*)?, (\d+)(\w*) \((\d+)\)/;
+    my ($power, $toughness);
+
+    if ( $subtype =~ /\// ) {
+    ($power, $toughness) = $subtype =~ / (.?.)\/(.?.)/;
+    $subtype =~ s/ (.?.\/.?.)//;
+    }
 
     my %info = (
-        real_name => $real_name,
-        image_path => $image_path,
-        description => $description,
-        flavor => $flavor,
+        real_name      => $real_name,
+        image_path     => $image_path,
+        description    => $description,
+        flavor         => $flavor,
+        type           => $type,
+        subtype        => $subtype,
+        general_mana   => $general_mana,
+        specific_mana  => $specific_mana,
+        converted_mana => $converted_mana,
+        power          => $power,
+        toughness      => $toughness,
     );
 
     return ( \%info );
