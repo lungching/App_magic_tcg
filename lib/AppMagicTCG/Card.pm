@@ -27,6 +27,8 @@ sub info {
         converted_mana   => $info->{converted_mana},
         power            => $info->{power},
         toughness        => $info->{toughness},
+        edition          => $info->{edition},
+        rarity           => $info->{rarity},
     );
 
     $self->render();

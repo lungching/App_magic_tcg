@@ -34,10 +34,13 @@ sub get_general_info {
     $image_path =~ s/.*(card_images.*)/$1/;
 
     # /html/body/table[3]/tr/td[2]/p[2]/b
-    my $container   = $agent->find('html body table')->[3]->find('tr td')->[1];
-    my $description = $container->find('p')->[1]->find('b')->[0]->text;
-    my $flavor      = $container->find('p')->[2]->find('i')->[0]->text;
-    my $meta = $container->find('p')->[0]->text;
+    my $container   = $agent->find('html body table')->[3]->find('tr td');
+    my $description = $container->[1]->find('p')->[1]->find('b')->[0]->text;
+    my $flavor      = $container->[1]->find('p')->[2]->find('i')->[0]->text;
+    my $meta        = $container->[1]->find('p')->[0]->text;
+    my $edition     = $container->[2]->find('small b')->[3]->text;
+    my ($rarity)    = $edition =~ /\((.*)\)/;
+    $edition =~ s/ \(.*$//;
 
     # E.G. - Creature — Beast 5/5, 5GGG (8)
     my ($type, $subtype, $general_mana, $specific_mana, $converted_mana) = $meta =~ /^(\w+)(?: . )?([^,]*)?, (\d+)(\w*) \((\d+)\)/;
@@ -60,6 +63,8 @@ sub get_general_info {
         converted_mana => $converted_mana,
         power          => $power,
         toughness      => $toughness,
+        edition        => $edition,
+        rarity         => $rarity,
     );
 
     return ( \%info );

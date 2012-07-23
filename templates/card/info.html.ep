@@ -11,4 +11,5 @@
     Type: <input type="text" name="type" value="<%= $type %>"/> - Subtype: <input type="text" name="subtype" value="<%= $subtype %>"/> Power/Toughness: <input type="text" name="power" value="<%= $power %>"/>/<input type="text" name="toughness" value="<%= $toughness %>"/><br/>
     Mana: <input type="text" name="mana" value="<%= $mana %>"/><br/>
     Converted Mana: <input type="text" name="converted_mana" value="<%= $converted_mana %>"/><br/>
+    Edition: <input type="text" name="edition" value="<%= $edition %>"/> Rarity: <input type="text" name="rarity" value="<%= $rarity %>"/><br/>
 </form>
