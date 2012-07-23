@@ -21,6 +21,9 @@ sub get_general_info {
     $card_entry =~ s/'//g;
     $card_entry = lc($card_entry);
 
+    ##### check db first. if not there then got to magiccards.info
+
+
     my $agent = WWW::Mechanize::Query->new();
     $agent->get( $query_url . $name );
 
@@ -43,7 +46,15 @@ sub get_general_info {
     $edition =~ s/ \(.*$//;
 
     # E.G. - Creature — Beast 5/5, 5GGG (8)
-    my ($type, $subtype, $general_mana, $specific_mana, $converted_mana) = $meta =~ /^(\w+)(?: . )?([^,]*)?, (\d+)(\w*) \((\d+)\)/;
+    my ($type, $subtype, $general_mana, $specific_mana, $converted_mana) = $meta =~ /^(\w+)        # type
+                                                                                      (?:[ ].[ ])? # delimiter if the there's a subtype
+                                                                                      ([^,]*)?     # subtype
+                                                                                      ,[ ]
+                                                                                      (\d*)        # general mana cost
+                                                                                      (\w+)        # specific mana cost
+                                                                                      [ ]
+                                                                                      \((\d+)\)    # converted mana cost
+                                                                                    /x;
     my ($power, $toughness);
 
     if ( $subtype =~ /\// ) {
@@ -51,7 +62,7 @@ sub get_general_info {
     $subtype =~ s/ (.?.\/.?.)//;
     }
 
-    my %info = (
+    my $info = {
         real_name      => $real_name,
         image_path     => $image_path,
         description    => $description,
@@ -65,9 +76,9 @@ sub get_general_info {
         toughness      => $toughness,
         edition        => $edition,
         rarity         => $rarity,
-    );
+    };
 
-    return ( \%info );
+    return ( $info );
 }
 
 sub save_image {

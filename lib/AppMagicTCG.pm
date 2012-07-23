@@ -12,8 +12,8 @@ sub startup {
     my $r = $self->routes;
 
   # Normal route to controller
-  $r->get('/')->to('example#welcome')->name("Blah");
-  $r->get('/card')->to('card#info')->name("card_info");
+  $r->get('/')->to('example#welcome')->name("start");
+  $r->route('/card')->via('GET', 'POST')->to('card#info')->name("card_info");
 
 }
 
