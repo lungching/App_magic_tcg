@@ -1,5 +1,5 @@
 
-use Test::More tests => 9;
+use Test::More tests => 11;
 
 use MagicScrape::Info;
 
@@ -14,3 +14,5 @@ is $info->{subtype}, 'Equipment', "Got subtype";
 is $info->{general_mana}, 3, "Got general mana";
 is $info->{specific_mana}, '', "No specific mana";
 is $info->{converted_mana}, 3, "Got converted mana";
+is $info->{edition}, 'Innistrad', "Got edtion";
+is $info->{rarity}, 'Uncommon', "Got rarity";
