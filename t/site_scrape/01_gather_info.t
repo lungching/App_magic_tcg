@@ -11,8 +11,8 @@ is $info->{description}, 'Equipped creature gets +3/+0. As long as equipped crea
 is $info->{flavor}, 'Outside the safety of Thraben, there is little distinction between tool and weapon.', 'Got flavor';
 is $info->{type}, 'Artifact', "Got type";
 is $info->{subtype}, 'Equipment', "Got subtype";
-is $info->{general_mana}, 3, "Got general mana";
-is $info->{specific_mana}, '', "No specific mana";
+is $info->{general_mana}, '', "No general mana";
+is $info->{specific_mana}, 3, "Got specific mana";
 is $info->{converted_mana}, 3, "Got converted mana";
 is $info->{edition}, 'Innistrad', "Got edtion";
 is $info->{rarity}, 'Uncommon', "Got rarity";
