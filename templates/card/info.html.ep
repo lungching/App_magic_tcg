@@ -5,11 +5,11 @@
 <br/>
 <br/>
 <form id="card_form" name="card_form" method="GET">
-    Name: <input type="text" name="card_name" value="<%= $card_name %>"/><br/>
-    Description: <textarea name="card_description"><%= $card_description %></textarea></br>
-    Flavor Text: <textarea name="card_flavor"><%= $card_flavor %></textarea></br>
-    Type: <input type="text" name="type" value="<%= $type %>"/> - Subtype: <input type="text" name="subtype" value="<%= $subtype %>"/> Power/Toughness: <input type="text" name="power" value="<%= $power %>"/>/<input type="text" name="toughness" value="<%= $toughness %>"/><br/>
-    Mana: <input type="text" name="mana" value="<%= $mana %>"/><br/>
-    Converted Mana: <input type="text" name="converted_mana" value="<%= $converted_mana %>"/><br/>
-    Edition: <input type="text" name="edition" value="<%= $edition %>"/> Rarity: <input type="text" name="rarity" value="<%= $rarity %>"/><br/>
+    Name: <input type="text" name="card_name" id="card_name" value="<%= $card_name %>"/> <input type="submit" name="search" id="search" value="Search"><br/>
+    Description: <textarea name="card_description" id="card_description"><%= $card_description %></textarea></br>
+    Flavor Text: <textarea name="card_flavor" id="card_flavor"><%= $card_flavor %></textarea></br>
+    Type: <input type="text" name="type" id="type" value="<%= $type %>"/> - Subtype: <input type="text" name="subtype" id="subtype" value="<%= $subtype %>"/> Power/Toughness: <input type="text" name="power" id="power" value="<%= $power %>"/>/<input type="text" name="toughness" id="toughness" value="<%= $toughness %>"/><br/>
+    Mana: <input type="text" name="mana" id="mana" value="<%= $mana %>"/><br/>
+    Converted Mana: <input type="text" name="converted_mana" id="converted_mana" value="<%= $converted_mana %>"/><br/>
+    Edition: <input type="text" name="edition" id="edition" value="<%= $edition %>"/> Rarity: <input type="text" name="rarity" id="rarity" value="<%= $rarity %>"/><br/>
 </form>
