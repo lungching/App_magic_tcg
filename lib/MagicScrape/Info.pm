@@ -41,9 +41,13 @@ sub get_general_info {
     my $description = $container->[1]->find('p')->[1]->find('b')->[0]->text;
     my $flavor      = $container->[1]->find('p')->[2]->find('i')->[0]->text;
     my $meta        = $container->[1]->find('p')->[0]->text;
-    my $edition     = $container->[2]->find('small b')->[3]->text;
-    my ($rarity)    = $edition =~ /\((.*)\)/;
-    $edition =~ s/ \(.*$//;
+
+    # not always at the same path so lets just us a regex
+    my $edition_html = $container->[2]->to_xml();
+    my ($edition, $rarity) = $edition_html =~ /Editions:<\/b><\/u><br\s\/>\s*
+                                                <img.*\s*
+                                                <b>(\w+)\s\((\w+)\)
+                                              /xms;
 
     # E.G. - Creature — Beast 5/5, 5GGG (8)
     my ($type, $subtype, $general_mana, $specific_mana, $converted_mana) = $meta =~ /^(\w+)        # type
