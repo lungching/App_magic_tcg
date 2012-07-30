@@ -43,11 +43,13 @@ sub get_general_info {
     my $meta        = $container->[1]->find('p')->[0]->text;
 
     # not always at the same path so lets just us a regex
+    # ultimately looking for something like 'Dark Ascension (Uncommon)'
     my $edition_html = $container->[2]->to_xml();
     my ($edition, $rarity) = $edition_html =~ /Editions:<\/b><\/u><br\s\/>\s*
                                                 <img.*\s*
-                                                <b>(\w+)\s\((\w+)\)
+                                                <b>([^(]+)\((\w+)\)    # search for stuff the is not a '(' then grab stuff inside the ()'s
                                               /xms;
+    $edition =~ s/ $//;
 
     # E.G. - Creature — Beast 5/5, 5GGG (8)
     my ($type, $subtype, $general_mana, $specific_mana, $converted_mana) = $meta =~ /^(\w+)        # type

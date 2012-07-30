@@ -1,5 +1,5 @@
 
-use Test::More tests => 11;
+use Test::More;
 
 use MagicScrape::Info;
 
@@ -16,3 +16,5 @@ is $info->{specific_mana}, 3, "Got specific mana";
 is $info->{converted_mana}, 3, "Got converted mana";
 is $info->{edition}, 'Innistrad', "Got edtion";
 is $info->{rarity}, 'Uncommon', "Got rarity";
+
+done_testing();
