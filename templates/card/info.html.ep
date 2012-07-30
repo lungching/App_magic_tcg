@@ -1,13 +1,24 @@
 % layout 'default';
 % title 'Card Info';
 
+
+% if ( $saved_result) {
+%   if ( $saved_result == 1 ) {
+    <p class="success"> Saved <%= $card_name %> Successfully. </p>
+%   }
+%   else {
+    <p class="error"> Could not save <%= $card_name %> - <%= $saved_result %> </p>
+%   }
+% }
+
+
 <img id="card_img" src="<%= $image_path %>"/>
 <br/>
 <br/>
 <form id="card_form" name="card_form" method="POST">
     Name:
     <input type="text" name="card_name" id="card_name" value="<%= $card_name %>"/>
-    <input type="submit" name="search" id="search" value="Search">
+    <input type="submit" name="search" id="search" value="Search"/>
     <br/>
     Description:
     <textarea name="card_description" id="card_description">
@@ -39,4 +50,5 @@
     Rarity:
     <input type="text" name="rarity" id="rarity" value="<%= $rarity %>"/>
     <br/>
+    <input type="submit" name="save" value="Save"/>
 </form>
