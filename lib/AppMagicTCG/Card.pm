@@ -37,6 +37,8 @@ sub info {
         toughness        => $info->{toughness},
         edition          => $info->{edition},
         rarity           => $info->{rarity},
+        quantity         => 0,
+        notes            => '',
     );
 
     $self->render();
@@ -61,10 +63,12 @@ sub save_data {
             converted_mana,
             edition,
             rarity,
-            quantity
+            quantity,
+            notes
         )
         VALUES
         (
+            ?,
             ?,
             ?,
             ?,
@@ -95,6 +99,7 @@ sub save_data {
         $self->param('edition') || '',
         $self->param('rarity') || '',
         $self->param('quantity') || '',
+        $self->param('notes') || '',
     );
 
     if ( $sth->err ) {
