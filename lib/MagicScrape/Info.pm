@@ -47,7 +47,7 @@ sub get_general_info {
     my $edition_html = $container->[2]->to_xml();
     my ($edition, $rarity) = $edition_html =~ /Editions:<\/b><\/u><br\s\/>\s*
                                                 <img.*\s*
-                                                <b>([^(]+)\((\w+)\)    # search for stuff the is not a '(' then grab stuff inside the ()'s
+                                                <b>([^(]+)\((.+)\)    # search for stuff the is not a '(' then grab stuff inside the ()'s
                                               /xms;
     $edition =~ s/ $//;
 
