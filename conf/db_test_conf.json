@@ -1,0 +1,7 @@
+{
+    "db" : {
+        "dsn" : "dbi:SQLite:dbname=db/test.db",
+        "username" : "",
+        "password" : ""
+    }
+}

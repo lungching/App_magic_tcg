@@ -1,0 +1,7 @@
+{
+    "db" : {
+        "dsn" : "dbi:SQLite:dbname=db/magic.db",
+        "username" : "",
+        "password" : ""
+    }
+}
