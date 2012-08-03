@@ -3,6 +3,21 @@ use Mojo::Base 'Mojolicious::Controller';
 
 use MagicScrape::Info;
 use DBD::SQLite;
+use Data::Printer;
+use Carp qw( croak );
+
+my $DBH;
+
+sub init {
+    my (
+        $class,
+        $config,
+    ) = @_;
+
+    croak "No dsn was passed!" unless $config && $config->{dsn};
+
+    $DBH = DBI->connect( $config->{dsn} ) unless $DBH;
+}
 
 # This action will render a template
 sub info {
@@ -25,20 +40,20 @@ sub info {
     }
 
     $self->stash(
-        card_name        => $info->{real_name},
-        card_description => $info->{description},
-        card_flavor      => $info->{flavor},
-        image_path       => $info->{image_path},
-        type             => $info->{type},
-        subtype          => $info->{subtype},
-        mana             => $info->{general_mana} . $info->{specific_mana},
-        converted_mana   => $info->{converted_mana},
-        power            => $info->{power},
-        toughness        => $info->{toughness},
-        edition          => $info->{edition},
-        rarity           => $info->{rarity},
-        quantity         => 0,
-        notes            => '',
+        card_name      => $info->{real_name},
+        description    => $info->{description},
+        flavor         => $info->{flavor},
+        image_path     => $info->{image_path},
+        type           => $info->{type},
+        subtype        => $info->{subtype},
+        mana           => $info->{general_mana} . $info->{specific_mana},
+        converted_mana => $info->{converted_mana},
+        power          => $info->{power},
+        toughness      => $info->{toughness},
+        edition        => $info->{edition},
+        rarity         => $info->{rarity},
+        quantity       => 0,
+        notes          => '',
     );
 
     $self->render();
@@ -46,9 +61,8 @@ sub info {
 
 sub save_data {
     my $self = shift;
-    my $dbh = DBI->connect("dbi:SQLite:dbname=db/magic.db","","");
 
-    my $sth = $dbh->prepare(q{
+    my $sth = $DBH->prepare(q{
         INSERT INTO card
         (
             name,
@@ -87,8 +101,8 @@ sub save_data {
 
     $sth->execute(
         $self->param('card_name') || '',
-        $self->param('card_description') || '',
-        $self->param('card_flavor') || '',
+        $self->param('description') || '',
+        $self->param('flavor') || '',
         $self->param('type') || '',
         $self->param('subtype') || '',
         $self->param('power') || '',

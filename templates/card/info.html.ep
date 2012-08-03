@@ -21,10 +21,10 @@
     <input type="submit" name="search" id="search" value="Search"/>
     <br/>
     Description:
-    <textarea name="card_description" id="card_description"><%= $card_description %></textarea>
+    <textarea name="description" id="description"><%= $description %></textarea>
     </br>
     Flavor Text:
-    <textarea name="card_flavor" id="card_flavor"><%= $card_flavor %></textarea>
+    <textarea name="flavor" id="flavor"><%= $flavor %></textarea>
     </br>
     Type:
     <input type="text" name="type" id="type" value="<%= $type %>"/>
