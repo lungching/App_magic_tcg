@@ -16,13 +16,7 @@ sub get_general_info {
 
     return if ! $name;
 
-    my $card_entry = $name;
-    $card_entry =~ s/ /_/g;
-    $card_entry =~ s/'//g;
-    $card_entry = lc($card_entry);
-
-    ##### check db first. if not there then got to magiccards.info
-
+    my $card_entry = card_img_name( $name );
 
     my $agent = WWW::Mechanize::Query->new();
     $agent->get( $query_url . $name );
@@ -72,7 +66,7 @@ sub get_general_info {
         real_name      => $real_name,
         image_path     => $image_path,
         description    => $description,
-        flavor         => $flavor,
+        flavor_text    => $flavor,
         type           => $type,
         subtype        => $subtype,
         general_mana   => $general_mana,
@@ -111,6 +105,18 @@ sub save_image {
     $agent->get( $img_url, ':content_file' => $target_file ) if ! -e $target_file;
 
     return ($real_name, $target_file);
+}
+
+sub card_img_name {
+    my $orig_name = shift;
+
+    my $card_entry = $orig_name;
+    $card_entry =~ s/ /_/g;
+    $card_entry =~ s/'//g;
+    $card_entry =~ s/,//g;
+    $card_entry = lc($card_entry);
+
+    return $card_entry;
 }
 
 1;

@@ -4,10 +4,10 @@
 
 % if ( $saved_result) {
 %   if ( $saved_result == 1 ) {
-    <p class="success"> Saved <%= $card_name %> Successfully. </p>
+    <p class="success"> Saved <%= $name %> Successfully. </p>
 %   }
 %   else {
-    <p class="error"> Could not save <%= $card_name %> - <%= $saved_result %> </p>
+    <p class="error"> Could not save <%= $name %> - <%= $saved_result %> </p>
 %   }
 % }
 
@@ -17,14 +17,14 @@
 <br/>
 <form id="card_form" name="card_form" method="POST">
     Name:
-    <input type="text" name="card_name" id="card_name" value="<%= $card_name %>"/>
+    <input type="text" name="name" id="name" value="<%= $name %>"/>
     <input type="submit" name="search" id="search" value="Search"/>
     <br/>
     Description:
     <textarea name="description" id="description"><%= $description %></textarea>
     </br>
     Flavor Text:
-    <textarea name="flavor" id="flavor"><%= $flavor %></textarea>
+    <textarea name="flavor_text" id="flavor_text"><%= $flavor_text %></textarea>
     </br>
     Type:
     <input type="text" name="type" id="type" value="<%= $type %>"/>

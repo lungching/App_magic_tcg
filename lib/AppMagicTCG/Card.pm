@@ -28,21 +28,36 @@ sub info {
     $self->stash( saved_result => undef );
     if ( $self->param('save') ) {
         my $saved_state;
-        my $saved_result = $self->save_data();
+        my %card_info;
+        for my $name ( $self->param ) {
+            $card_info{ $name } = $self->param( $name );
+        }
+        my $saved_result = $self->save_data( \%card_info );
         $self->stash( saved_result => $saved_result );
     }
 
     my $doc_root = '/home/mburns/projects/App_magic_tcg/';  # hard code for now TODO have the server find this
-    my $card_name = $self->param('card_name');
+    my $card_name = $self->param('name');
 
     if ( $card_name ) {
-        $info = MagicScrape::Info::get_general_info( $card_name, $doc_root );
+        ##### check db first. if not there then got to magiccards.info
+
+        $info = $self->get_db_info( $card_name );
+        my $card_img = MagicScrape::Info::card_img_name( $card_name );
+
+        if ( $info->{name} ) {
+            $info->{real_name} = $info->{name};
+            $info->{image_path} = "card_images/$card_img.jpeg";
+        }
+        else {
+            $info = MagicScrape::Info::get_general_info( $card_name, $doc_root );
+        }
     }
 
     $self->stash(
-        card_name      => $info->{real_name},
+        name           => $info->{real_name},
         description    => $info->{description},
-        flavor         => $info->{flavor},
+        flavor_text    => $info->{flavor_text},
         image_path     => $info->{image_path},
         type           => $info->{type},
         subtype        => $info->{subtype},
@@ -52,8 +67,8 @@ sub info {
         toughness      => $info->{toughness},
         edition        => $info->{edition},
         rarity         => $info->{rarity},
-        quantity       => 0,
-        notes          => '',
+        quantity       => $info->{quantity} || 0,
+        notes          => $info->{notes},
     );
 
     $self->render();
@@ -61,6 +76,7 @@ sub info {
 
 sub save_data {
     my $self = shift;
+    my $data = shift;
 
     my $sth = $DBH->prepare(q{
         INSERT INTO card
@@ -68,8 +84,8 @@ sub save_data {
             name,
             description,
             flavor_text,
-            card_type,
-            card_subtype,
+            type,
+            subtype,
             power,
             toughness,
             generic_mana,
@@ -100,20 +116,20 @@ sub save_data {
     });
 
     $sth->execute(
-        $self->param('card_name') || '',
-        $self->param('description') || '',
-        $self->param('flavor') || '',
-        $self->param('type') || '',
-        $self->param('subtype') || '',
-        $self->param('power') || '',
-        $self->param('toughness') || '',
-        $self->param('generic_mana') || '',
-        $self->param('specific_mana') || '',
-        $self->param('converted_mana') || '',
-        $self->param('edition') || '',
-        $self->param('rarity') || '',
-        $self->param('quantity') || '',
-        $self->param('notes') || '',
+        $data->{name} || '',
+        $data->{description} || '',
+        $data->{flavor_text} || '',
+        $data->{type} || '',
+        $data->{subtype} || '',
+        $data->{power} || '',
+        $data->{toughness} || '',
+        $data->{generic_mana} || '',
+        $data->{specific_mana} || '',
+        $data->{converted_mana} || '',
+        $data->{edition} || '',
+        $data->{rarity} || '',
+        $data->{quantity} || '',
+        $data->{notes} || '',
     );
 
     if ( $sth->err ) {
@@ -122,6 +138,26 @@ sub save_data {
     else {
         return 1;
     }
+}
+
+sub get_db_info {
+    my (
+        $self,
+        $name,
+    ) = @_;
+
+    $name = lc($name);
+    my $sth = $DBH->prepare(q{ SELECT * FROM card WHERE LOWER(name) = ? });
+    $sth->execute( $name );
+    my $card = $sth->fetchrow_hashref();
+    return $card;
+
+}
+
+sub clear_db {
+    my $self = shift;
+
+    return $DBH->do(q{ DELETE FROM card });
 }
 
 1;
