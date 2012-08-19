@@ -55,6 +55,7 @@ sub info {
     }
 
     $self->stash(
+        card_id        => $info->{card_id},
         name           => $info->{real_name},
         description    => $info->{description},
         flavor_text    => $info->{flavor_text},
@@ -78,44 +79,70 @@ sub save_data {
     my $self = shift;
     my $data = shift;
 
-    my $sth = $DBH->prepare(q{
-        INSERT INTO card
-        (
-            name,
-            description,
-            flavor_text,
-            type,
-            subtype,
-            power,
-            toughness,
-            generic_mana,
-            specific_mana,
-            converted_mana,
-            edition,
-            rarity,
-            quantity,
-            notes
-        )
-        VALUES
-        (
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?
-        )
-    });
+    my $sth;
 
-    $sth->execute(
+    if ( $data->{card_id} ) {
+        $sth = $DBH->prepare(q{
+            UPDATE card
+            SET
+                name = ?,
+                description = ?,
+                flavor_text = ?,
+                type = ?,
+                subtype = ?,
+                power = ?,
+                toughness = ?,
+                generic_mana = ?,
+                specific_mana = ?,
+                converted_mana = ?,
+                edition = ?,
+                rarity = ?,
+                quantity = ?,
+                notes = ?
+            WHERE
+                card_id = ?
+        });
+    }
+    else {
+        $sth = $DBH->prepare(q{
+            INSERT INTO card
+            (
+                name,
+                description,
+                flavor_text,
+                type,
+                subtype,
+                power,
+                toughness,
+                generic_mana,
+                specific_mana,
+                converted_mana,
+                edition,
+                rarity,
+                quantity,
+                notes
+            )
+            VALUES
+            (
+                ?,
+                ?,
+                ?,
+                ?,
+                ?,
+                ?,
+                ?,
+                ?,
+                ?,
+                ?,
+                ?,
+                ?,
+                ?,
+                ?
+            )
+        });
+    }
+
+    my @bound = (
         $data->{name} || '',
         $data->{description} || '',
         $data->{flavor_text} || '',
@@ -131,6 +158,10 @@ sub save_data {
         $data->{quantity} || '',
         $data->{notes} || '',
     );
+
+    push @bound, $data->{card_id} if $data->{card_id};
+
+    $sth->execute( @bound );
 
     if ( $sth->err ) {
         return $sth->errstr;

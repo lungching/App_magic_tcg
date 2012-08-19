@@ -36,5 +36,13 @@ for my $col ( keys %data ) {
     is $card->{ $col }, $data{ $col }, "Column $col correct";
 }
 
+$card->{description} = 'description2';
+
+my $info = $card_app->save_data( $card );
+
+$card = $card_app->get_db_info( 'name1' );
+is $card->{name}, $data{name}, "One card found";
+is $card->{description}, 'description2', "Description updated";
+
 
 done_testing();
