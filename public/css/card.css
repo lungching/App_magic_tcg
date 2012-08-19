@@ -1,0 +1,20 @@
+#card_info {
+    top:10px;
+    left:350px;
+    position:absolute;
+}
+
+#description {
+    width:320px;
+    height:140px;
+}
+
+#flavor_text {
+    width:320px;
+    height:70px;
+}
+
+#notes {
+    width:320px;
+    height:70px;
+}
