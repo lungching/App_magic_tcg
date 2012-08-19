@@ -15,42 +15,44 @@
 <img id="card_img" src="<%= $image_path %>"/>
 <br/>
 <br/>
-<form id="card_form" name="card_form" method="POST">
-    Name:
-    <input type="text" name="name" id="name" value="<%= $name %>"/>
-    <input type="submit" name="search" id="search" value="Search"/>
-    <br/>
-    Description:
-    <textarea name="description" id="description"><%= $description %></textarea>
-    </br>
-    Flavor Text:
-    <textarea name="flavor_text" id="flavor_text"><%= $flavor_text %></textarea>
-    </br>
-    Type:
-    <input type="text" name="type" id="type" value="<%= $type %>"/>
-    - Subtype: 
-    <input type="text" name="subtype" id="subtype" value="<%= $subtype %>"/>
-    Power/Toughness:
-    <input type="text" name="power" id="power" value="<%= $power %>"/>
-    /
-    <input type="text" name="toughness" id="toughness" value="<%= $toughness %>"/>
-    <br/>
-    Mana:
-    <input type="text" name="mana" id="mana" value="<%= $mana %>"/>
-    <br/>
-    Converted Mana:
-    <input type="text" name="converted_mana" id="converted_mana" value="<%= $converted_mana %>"/>
-    <br/>
-    Edition:
-    <input type="text" name="edition" id="edition" value="<%= $edition %>"/>
-    Rarity:
-    <input type="text" name="rarity" id="rarity" value="<%= $rarity %>"/>
-    <br/>
-    Quantity:
-    <input type="text" name="quantity" id="quantity" value="<%= $quantity %>"/>
-    <br/>
-    Notes:
-    <textarea name="notes" id="notes"><%= $notes %></textarea>
-    <br/>
-    <input type="submit" name="save" value="Save"/>
-</form>
+<div id="card_info" name="card_info">
+  <form id="card_form" name="card_form" method="POST">
+      <input type="hidden" name="card_id" id="card_id" value="<%= $card_id %>"/>
+      Name:
+      <input type="text" name="name" id="name" value="<%= $name %>"/>
+      <input type="submit" name="search" id="search" value="Search"/>
+      <br/>
+      Description:<br>
+      <textarea name="description" id="description"><%= $description %></textarea>
+      </br>
+      Flavor Text:<br>
+      <textarea name="flavor_text" id="flavor_text"><%= $flavor_text %></textarea>
+      </br>
+      Type:
+      <input type="text" name="type" id="type" size=20 value="<%= $type %>"/>
+      - Subtype: 
+      <input type="text" name="subtype" id="subtype" size=10 value="<%= $subtype %>"/>
+      Power/Toughness:
+      <input type="text" name="power" id="power" size=2 value="<%= $power %>"/>
+      /
+      <input type="text" name="toughness" id="toughness" size=2 value="<%= $toughness %>"/>
+      <br/>
+      Mana:
+      <input type="text" name="mana" id="mana" size=5 value="<%= $mana %>"/>
+      (Converted Mana:
+      <input type="text" name="converted_mana" size=2 id="converted_mana" value="<%= $converted_mana %>"/>)
+      <br/>
+      Edition:
+      <input type="text" name="edition" id="edition" value="<%= $edition %>"/>
+      Rarity:
+      <input type="text" name="rarity" id="rarity" value="<%= $rarity %>"/>
+      <br/>
+      Quantity:
+      <input type="text" name="quantity" id="quantity" size=3 value="<%= $quantity %>"/><button type="button" id="inc" onclick="var qty = $('#quantity'); var val = qty.attr('value'); val++; qty.attr('value', val);">+</button><button type="button" id="inc" onclick="var qty = $('#quantity'); var val = qty.attr('value'); val--; qty.attr('value', val);">-</button>
+      <br/>
+      Notes:<br>
+      <textarea name="notes" id="notes"><%= $notes %></textarea>
+      <br/>
+      <input type="submit" name="save" value="Save"/>
+  </form>
+</div>

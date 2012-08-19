@@ -1,5 +1,9 @@
 <!DOCTYPE html>
 <html>
-  <head><title><%= title %></title></head>
+  <head>
+    <title><%= title %></title>
+    <link rel="stylesheet" type="text/css" href="css/card.css" />
+    <script type="text/javascript" src="/js/jquery-1.8.0.js"></script>
+  </head>
   <body><%= content %></body>
 </html>
