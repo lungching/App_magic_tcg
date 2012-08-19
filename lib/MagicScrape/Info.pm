@@ -2,6 +2,7 @@ package MagicScrape::Info;
 
 use strict;
 use warnings;
+use utf8;
 
 use v5.10;
 use WWW::Mechanize::Query;
@@ -39,15 +40,17 @@ sub get_general_info {
     # not always at the same path so lets just us a regex
     # ultimately looking for something like 'Dark Ascension (Uncommon)'
     my $edition_html = $container->[2]->to_xml();
+
+    # ugh, I gotta change this to use named captures
     my ($edition, $rarity) = $edition_html =~ /Editions:<\/b><\/u><br\s\/>\s*
                                                 <img.*\s*
-                                                <b>([^(]+)\((.+)\)    # search for stuff the is not a '(' then grab stuff inside the ()'s
+                                                <b>([^(]+)\(([^\)]+)\)    # search for stuff the is not a '(' then grab stuff inside the ()'s
                                               /xms;
     $edition =~ s/ $//;
 
     # E.G. - Creature — Beast 5/5, 5GGG (8)
-    my ($type, $subtype, $general_mana, $specific_mana, $converted_mana) = $meta =~ /^(\w+)        # type
-                                                                                      (?:[ ].[ ])? # delimiter if the there's a subtype
+    my ($type, $subtype, $general_mana, $specific_mana, $converted_mana) = $meta =~ /^([^—]+)        # type
+                                                                                      (?:—[ ])? # delimiter if the there's a subtype
                                                                                       ([^,]*)?     # subtype
                                                                                       ,[ ]
                                                                                       (\d*)        # general mana cost
@@ -55,9 +58,10 @@ sub get_general_info {
                                                                                       [ ]
                                                                                       \((\d+)\)    # converted mana cost
                                                                                     /x;
+    $type =~ s/\s*$//;
     my ($power, $toughness);
 
-    if ( $subtype =~ /\// ) {
+    if ( $subtype && $subtype =~ /\// ) {
     ($power, $toughness) = $subtype =~ / (.?.)\/(.?.)/;
     $subtype =~ s/ (.?.\/.?.)//;
     }
