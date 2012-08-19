@@ -37,6 +37,8 @@ sub get_general_info {
     my $flavor      = $container->[1]->find('p')->[2]->find('i')->[0]->text;
     my $meta        = $container->[1]->find('p')->[0]->text;
 
+    $flavor =~ s/—/-/g;
+
     # not always at the same path so lets just us a regex
     # ultimately looking for something like 'Dark Ascension (Uncommon)'
     my $edition_html = $container->[2]->to_xml();
@@ -49,7 +51,7 @@ sub get_general_info {
     $edition =~ s/ $//;
 
     # E.G. - Creature — Beast 5/5, 5GGG (8)
-    my ($type, $subtype, $general_mana, $specific_mana, $converted_mana) = $meta =~ /^([^—]+)        # type
+    my ($type, $subtype, $generic_mana, $specific_mana, $converted_mana) = $meta =~ /^([^—]+)        # type
                                                                                       (?:—[ ])? # delimiter if the there's a subtype
                                                                                       ([^,]*)?     # subtype
                                                                                       ,[ ]
@@ -58,6 +60,13 @@ sub get_general_info {
                                                                                       [ ]
                                                                                       \((\d+)\)    # converted mana cost
                                                                                     /x;
+
+    # if there is only generic mana it gets picked up as specific mana
+    if ( ! $generic_mana && $specific_mana =~ /^\d+$/ ) {
+        $generic_mana = $specific_mana;
+        $specific_mana = undef;
+    }
+
     $type =~ s/\s*$//;
     my ($power, $toughness);
 
@@ -73,7 +82,7 @@ sub get_general_info {
         flavor_text    => $flavor,
         type           => $type,
         subtype        => $subtype,
-        general_mana   => $general_mana,
+        generic_mana   => $generic_mana,
         specific_mana  => $specific_mana,
         converted_mana => $converted_mana,
         power          => $power,

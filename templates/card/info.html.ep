@@ -38,7 +38,7 @@
       <input type="text" name="toughness" id="toughness" size=2 value="<%= $toughness %>"/>
       <br/>
       Mana:
-      <input type="text" name="mana" id="mana" size=5 value="<%= $mana %>"/>
+      <input type="text" name="generic_mana" id="generic_mana" size=2 value="<%= $generic_mana %>"/> <input type="text" name="specific_mana" id="specific_mana" size=5 value="<%= $specific_mana %>"/>
       (Converted Mana:
       <input type="text" name="converted_mana" size=2 id="converted_mana" value="<%= $converted_mana %>"/>)
       <br/>
