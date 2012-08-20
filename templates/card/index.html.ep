@@ -1,0 +1,11 @@
+% layout 'default';
+% title 'Magic';
+
+<form name="card_search" action="card" method="post">
+    Search Card: <input type="text" name="name" id="name"/> <input type="submit" name="search" id="search" value="Search"/>
+</form>
+
+<form name="deck" action="deck" method="post">
+    <input type="submit" name="new_deck" id="new_deck" value="New Deck"> or Search Deck: <input type="text" name="name" id="name"/> <input type="submit" name="search" id="search" value="Search"/>
+</form>
+
