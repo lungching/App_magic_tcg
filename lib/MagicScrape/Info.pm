@@ -67,6 +67,11 @@ sub get_general_info {
         $specific_mana = undef;
     }
 
+    if ( $specific_mana =~ /X/ ) {
+        my $num_xes = $specific_mana =~ s/X//g;
+        $generic_mana = 'X' x $num_xes . $generic_mana;
+    }
+
     $type =~ s/\s*$//;
     my ($power, $toughness);
 

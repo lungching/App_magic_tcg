@@ -1,17 +1,6 @@
 % layout 'default';
 % title 'Card Info';
 
-
-% if ( $saved_result) {
-%   if ( $saved_result == 1 ) {
-    <p class="success"> Saved <%= $name %> Successfully. </p>
-%   }
-%   else {
-    <p class="error"> Could not save <%= $name %> - <%= $saved_result %> </p>
-%   }
-% }
-
-
 <img id="card_img" src="<%= $image_path %>"/>
 <br/>
 <br/>
@@ -54,5 +43,15 @@
       <textarea name="notes" id="notes"><%= $notes %></textarea>
       <br/>
       <input type="submit" name="save" value="Save"/>
+
+        % if ( $saved_result) {
+        %   if ( $saved_result == 1 ) {
+            <p class="success"> Saved <%= $name %> Successfully. </p>
+        %   }
+        %   else {
+            <p class="error"> Could not save <%= $name %> - <%= $saved_result %> </p>
+        %   }
+        % }
+
   </form>
 </div>

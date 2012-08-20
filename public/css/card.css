@@ -18,3 +18,11 @@
     width:320px;
     height:70px;
 }
+
+.error {
+    color:red;
+}
+
+.success {
+    color:green;
+}
