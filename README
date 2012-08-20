@@ -1,0 +1,10 @@
+This app will store magic cards and their info as it appears on http://magiccards.info
+It will also allow you to create and organize decks.
+
+COPYRIGHT AND LICENSE
+    Copyright (C) 2009 by Mike Burns
+
+    This library is free software; you can redistribute it and/or modify it
+    under the same terms as Perl itself, either Perl version 5.10.0 or, at
+    your option, any later version of Perl 5 you may have available.
+
