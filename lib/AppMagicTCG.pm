@@ -21,6 +21,7 @@ sub startup {
   # Normal route to controller
   $r->get('/')->to('card#index')->name("start");
   $r->route('/card')->via('GET', 'POST')->to('card#info')->name("card_info");
+  $r->route('/deck')->via('GET', 'POST')->to('deck#admin')->name("deck_admin");
 
   AppMagicTCG::Card->init( $config->{db} );
 }
