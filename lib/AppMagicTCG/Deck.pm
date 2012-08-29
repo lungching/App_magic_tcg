@@ -26,9 +26,9 @@ sub admin {
 
     $self->stash( saved_result => undef );
 
-    if ( $self->param('new') ) {
+    if ( $self->param('new_deck') ) {
     }
-    elsif ( $self->param('save') ) {
+    elsif ( $self->param('search') ) {
         my $saved_result;
         $self->stash( saved_result => $saved_result );
     }
