@@ -1,0 +1,10 @@
+% layout 'default';
+% title 'Deck Admin';
+
+% if ( $error ) {
+    <p class="error">Error: <%= $error %> </p>
+% }
+
+<form name="deck" action="deck" method="post">
+     Deck: <input type="text" name="deck_name" id="deck_name"/> <input type="submit" name="search" id="search" value="Search"/> or <input type="submit" name="new_deck" id="new_deck" value="New Deck">
+</form>
