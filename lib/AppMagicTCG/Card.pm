@@ -19,7 +19,6 @@ sub init {
     $DBH = DBI->connect( $config->{dsn} ) unless $DBH;
 }
 
-# This action will render a template
 sub info {
     my $self = shift;
 

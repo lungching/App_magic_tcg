@@ -6,6 +6,7 @@ use Data::Printer;
 use Carp qw( croak );
 
 my $DBH;
+my $doc_root = '/home/mburns/projects/App_magic_tcg/';  # hard code for now TODO have the server find this
 
 sub init {
     my (
@@ -18,46 +19,53 @@ sub init {
     $DBH = DBI->connect( $config->{dsn} ) unless $DBH;
 }
 
-# This action will render a template
 sub admin {
     my $self = shift;
 
     my $info;
 
-    $self->stash( saved_result => undef );
+    $self->stash( error => '' );
 
     if ( $self->param('new_deck') ) {
+        $self->new_deck();
     }
     elsif ( $self->param('search') ) {
-        my $saved_result;
-        $self->stash( saved_result => $saved_result );
+        my $deck = get_deck_name($self->param('deck_name'));
+
+        if ( $deck ) {
+            $self->show_deck();
+        }
+        else {
+            $self->stash('error' => 'Could not find deck ' . $self->param('deck_name') . '.');
+        }
     }
 
-    my $doc_root = '/home/mburns/projects/App_magic_tcg/';  # hard code for now TODO have the server find this
-    my $card_name = $self->param('name');
-
-
-    $self->stash(
-        card_id        => $info->{card_id},
-        name           => $info->{real_name},
-        description    => $info->{description},
-        flavor_text    => $info->{flavor_text},
-        image_path     => $info->{image_path},
-        type           => $info->{type},
-        subtype        => $info->{subtype},
-        generic_mana   => $info->{generic_mana},
-        specific_mana  => $info->{specific_mana},
-        converted_mana => $info->{converted_mana},
-        power          => $info->{power},
-        toughness      => $info->{toughness},
-        edition        => $info->{edition},
-        rarity         => $info->{rarity},
-        quantity       => $info->{quantity} || 0,
-        notes          => $info->{notes},
-    );
-
-    $self->render();
 }
 
+sub get_deck_name {
+    my $name = shift;
+
+    return;
+}
+
+sub new_deck {
+    my $self = shift;
+
+    my $sth = $DBH->prepare("INSERT INTO deck (name) VALUES ( ? )");
+
+    $sth->execute( $self->param('deck_name') );
+
+    if ( $sth->err ) {
+        $self->stash( error => "Database error - " . $sth->errstr );
+    }
+    else {
+        $self->stash( 'new_deck' => "Successfully created deck " . $self->param('deck_name') . '.');
+        $self->show_deck;
+    }
+}
+
+sub show_deck {
+    my $self = shift;
+}
 
 1;
