@@ -30,9 +30,9 @@ sub admin {
         $self->new_deck();
     }
     elsif ( $self->param('search') ) {
-        my $deck = get_deck_name($self->param('deck_name'));
+        my $found_deck = search_deck_name($self->param('deck_name'));
 
-        if ( $deck ) {
+        if ( $found_deck ) {
             $self->show_deck();
         }
         else {
@@ -42,10 +42,12 @@ sub admin {
 
 }
 
-sub get_deck_name {
+sub search_deck_name {
     my $name = shift;
 
-    return;
+    my @found = $DBH->selectrow_array("SELECT COUNT(*) FROM deck WHERE name = ?", undef, $name);
+
+    return $found[0];
 }
 
 sub new_deck {
@@ -66,6 +68,26 @@ sub new_deck {
 
 sub show_deck {
     my $self = shift;
+
+    my $info = get_deck_info( $self->param('deck_name') );
+
+    $self->stash(
+        deck_id      => $info->{deck_id},
+        deck_name    => $info->{name},
+        notes        => $info->{notes},
+        image_path   => '',
+        saved_result => '',
+    );
+
+    $self->render('deck/detail');
+}
+
+sub get_deck_info {
+    my $name = shift;
+
+    my $info = $DBH->selectrow_hashref("SELECT * FROM deck WHERE name = ?", undef, $name);
+
+    return $info;
 }
 
 1;

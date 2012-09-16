@@ -2,7 +2,7 @@
 % title 'Deck Admin';
 
 % if ( $error ) {
-    <p class="error">Error: <%= $error %> </p>
+    <p class="error"><%= $error %></p>
 % }
 
 <form name="deck" action="deck" method="post">
