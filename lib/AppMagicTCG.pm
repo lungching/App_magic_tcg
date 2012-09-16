@@ -2,6 +2,7 @@ package AppMagicTCG;
 use Mojo::Base 'Mojolicious';
 
 use AppMagicTCG::Card;
+use AppMagicTCG::Deck;
 use Data::Printer;
 
 has conf_file => 'conf/db_conf.json';
@@ -24,6 +25,7 @@ sub startup {
   $r->route('/deck')->via('GET', 'POST')->to('deck#admin')->name("deck_admin");
 
   AppMagicTCG::Card->init( $config->{db} );
+  AppMagicTCG::Deck->init( $config->{db} );
 }
 
 1;
