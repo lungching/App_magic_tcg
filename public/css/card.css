@@ -26,3 +26,8 @@
 .success {
     color:green;
 }
+
+.card_list {
+    left:100px;
+    position:absolute;
+}

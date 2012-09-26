@@ -13,9 +13,14 @@
       <input type="submit" name="search" id="search" value="Search"/>
       <br/>
       <br/>
-      Notes:<br>
+      Notes:<br/>
       <textarea name="notes" id="notes"><%= $notes %></textarea>
-      <br/>
+      <br/><br/>
+      Cards:<br/>
+% for my $card ( @$cards ) {
+       <div class="card_list"><%= $card->{card_name} %></div><br/>
+% }
+      <br/><br/><br/>
       <input type="submit" name="save" value="Save"/>
 
         % if ( $saved_result) {

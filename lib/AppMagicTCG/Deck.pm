@@ -77,6 +77,7 @@ sub show_deck {
         notes        => $info->{notes},
         image_path   => '',
         saved_result => '',
+        cards        => $info->{cards},
     );
 
     $self->render('deck/detail');
@@ -86,6 +87,27 @@ sub get_deck_info {
     my $name = shift;
 
     my $info = $DBH->selectrow_hashref("SELECT * FROM deck WHERE name = ?", undef, $name);
+
+    my $mapping = $DBH->selectall_arrayref("
+        SELECT
+            c.name,
+            c.card_id
+        FROM
+            deck d,
+            deck_card_map m,
+            card c
+        WHERE
+            d.deck_id = m.deck_id
+            AND c.card_id = m.card_id
+            AND d.decK_id = ?
+    ", undef, $info->{deck_id});
+
+    my @cards;
+    for my $card ( @$mapping ) {
+        push @cards, { card_name => $card->[0], card_id => $card->[1] };
+    }
+
+    $info->{cards} = \@cards;
 
     return $info;
 }
