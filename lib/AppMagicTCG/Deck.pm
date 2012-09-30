@@ -39,6 +39,11 @@ sub admin {
             $self->stash('error' => 'Could not find deck ' . $self->param('deck_name') . '.');
         }
     }
+    elsif ( $self->param('save') ) {
+        my $saved_result = $self->save_deck_info();
+        $self->stash( saved_result => $saved_result );
+        $self->show_deck();
+    }
 
 }
 
@@ -110,6 +115,27 @@ sub get_deck_info {
     $info->{cards} = \@cards;
 
     return $info;
+}
+
+sub save_deck_info {
+    my $self = shift;
+
+    my $sth = $DBH->prepare("
+        UPDATE deck
+        SET
+            notes = ?
+        WHERE
+            deck_id = ?
+    ");
+
+    $sth->execute( $self->param('notes'), $self->param('deck_id') );
+
+    if ( $sth->err ) {
+        return $sth->errstr;
+    }
+    else {
+        return 1;
+    }
 }
 
 1;
