@@ -44,6 +44,14 @@ sub admin {
         $self->stash( saved_result => $saved_result );
         $self->show_deck();
     }
+    elsif ( $self->param('submit_new_card') ) {
+        my $saved_result = $self->add_card();
+        $self->stash( saved_result => $saved_result );
+        $self->show_deck();
+    }
+    else {
+        $self->stash('error' => "I don't know what you want me to do!!!");
+    }
 
 }
 
@@ -75,6 +83,7 @@ sub show_deck {
     my $self = shift;
 
     my $info = get_deck_info( $self->param('deck_name') );
+    my $card_list = get_card_list();
 
     $self->stash(
         deck_id      => $info->{deck_id},
@@ -83,6 +92,7 @@ sub show_deck {
         image_path   => '',
         saved_result => '',
         cards        => $info->{cards},
+        card_list    => $card_list,
     );
 
     $self->render('deck/detail');
@@ -136,6 +146,24 @@ sub save_deck_info {
     else {
         return 1;
     }
+}
+
+sub get_card_list {
+    my $sth = $DBH->prepare("SELECT card_id, name FROM card ORDER BY name");
+    $sth->execute();
+    my @list;
+
+    while ( my $row = $sth->fetchrow_hashref ) {
+        push @list, { name => $row->{name}, value => $row->{card_id} };
+    }
+
+    return \@list;
+}
+
+sub add_card {
+    my $self = shift;
+
+
 }
 
 1;

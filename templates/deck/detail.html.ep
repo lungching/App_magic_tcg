@@ -15,11 +15,6 @@
       <br/>
       Notes:<br/>
       <textarea name="notes" id="notes"><%= $notes %></textarea>
-      <br/><br/>
-      Cards:<br/>
-% for my $card ( @$cards ) {
-       <div class="card_list"><%= $card->{card_name} %></div><br/>
-% }
       <br/><br/><br/>
       <input type="submit" name="save" value="Save"/>
 
@@ -33,4 +28,17 @@
         % }
 
   </form>
+  <br/><br/>
+  <form id="deck_add" name "deck_add">
+      Cards:<br/>
+% for my $card ( @$cards ) {
+       <div class="card_list"><%= $card->{card_name} %></div><br/>
+% }
+    <br/><br/>
+    <select id="add_card" name = "add_card">
+        % for my $entry ( @$card_list ) {
+            <option value="<%= $entry->{value} %>"><%= $entry->{name} %></option>
+        % }
+    </select>
+    <input type="submit" name="submit_new_card" id="submit_new_card" value="Add Card">
 </div>
