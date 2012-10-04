@@ -49,10 +49,6 @@ sub admin {
         $self->stash( saved_result => $saved_result );
         $self->show_deck();
     }
-    else {
-        $self->stash('error' => "I don't know what you want me to do!!!");
-    }
-
 }
 
 sub search_deck_name {
@@ -163,6 +159,20 @@ sub get_card_list {
 sub add_card {
     my $self = shift;
 
+    my $deck_id = $self->param('deck_id');
+    my $card_id = $self->param('add_card');
+
+    return "Need both a deck id and a card id" unless $deck_id && $card_id;
+
+    my $sth = $DBH->prepare("INSERT INTO deck_card_map (deck_id, card_id) VALUES (?, ?)");
+    $sth->execute( $deck_id, $card_id );
+
+    if ( $sth->err ) {
+        return $sth->errstr;
+    }
+    else {
+        return 1;
+    }
 
 }
 

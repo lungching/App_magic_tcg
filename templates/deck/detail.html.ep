@@ -29,7 +29,9 @@
 
   </form>
   <br/><br/>
-  <form id="deck_add" name "deck_add">
+  <form id="deck_add" name "deck_add" method="POST">
+      <input type="hidden" name="deck_id" id="deck_id" value="<%= $deck_id %>"/>
+      <input type="hidden" name="deck_name" id="deck_name" value="<%= $deck_name %>"/>
       Cards:<br/>
 % for my $card ( @$cards ) {
        <div class="card_list"><%= $card->{card_name} %></div><br/>
