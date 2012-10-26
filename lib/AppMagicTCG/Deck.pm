@@ -3,6 +3,7 @@ use Mojo::Base 'Mojolicious::Controller';
 
 use DBD::SQLite;
 use Data::Printer;
+use MagicScrape::Info;
 use Carp qw( croak );
 
 my $DBH;
@@ -49,6 +50,9 @@ sub admin {
         $self->stash( saved_result => $saved_result );
         $self->show_deck();
     }
+    elsif ( $self->param('play') ) {
+        $self->show_play_deck();
+    }
 }
 
 sub search_deck_name {
@@ -94,6 +98,31 @@ sub show_deck {
     $self->render('deck/detail');
 }
 
+sub show_play_deck {
+    my $self = shift;
+
+    my $info = get_deck_info( $self->param('deck_name') );
+    my $image_list = $self->get_images();
+
+    $self->stash(
+        deck_name => $info->{name},
+        images    => $image_list,
+    );
+
+    $self->render('deck/play');
+}
+
+
+# info = {
+#   card_name => <name>,
+#   card_id => <id>,
+#   quantity => <num>,
+#   cards => [
+#       { card_name => <name>, card_id => <id>, quantity => <quantity in deck>, },
+#       { card_name => <name>, card_id => <id>, quantity => <quantity in deck>, },
+#       ...
+#   ],
+# }
 sub get_deck_info {
     my $name = shift;
 
@@ -176,6 +205,22 @@ sub add_card {
         return 1;
     }
 
+}
+
+sub get_images {
+    my $self = shift;
+
+    my $info = get_deck_info( $self->param('deck_name') );
+    my @images;
+
+    for my $card ( @{ $info->{cards} } ) {
+        my $card_img = MagicScrape::Info::card_img_name( $card->{card_name} );
+        for (1..$card->{quantity}) {
+            push @images, "card_images/$card_img.jpeg";
+        }
+    }
+
+    return \@images;
 }
 
 1;
