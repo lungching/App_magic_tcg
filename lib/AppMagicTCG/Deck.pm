@@ -102,7 +102,8 @@ sub get_deck_info {
     my $mapping = $DBH->selectall_arrayref("
         SELECT
             c.name,
-            c.card_id
+            c.card_id,
+            m.quantity
         FROM
             deck d,
             deck_card_map m,
@@ -110,12 +111,12 @@ sub get_deck_info {
         WHERE
             d.deck_id = m.deck_id
             AND c.card_id = m.card_id
-            AND d.decK_id = ?
+            AND d.deck_id = ?
     ", undef, $info->{deck_id});
 
     my @cards;
     for my $card ( @$mapping ) {
-        push @cards, { card_name => $card->[0], card_id => $card->[1] };
+        push @cards, { card_name => $card->[0], card_id => $card->[1], quantity => $card->[2], };
     }
 
     $info->{cards} = \@cards;
@@ -150,7 +151,7 @@ sub get_card_list {
     my @list;
 
     while ( my $row = $sth->fetchrow_hashref ) {
-        push @list, { name => $row->{name}, value => $row->{card_id} };
+        push @list, { name => $row->{name}, value => $row->{card_id}, };
     }
 
     return \@list;
@@ -161,11 +162,12 @@ sub add_card {
 
     my $deck_id = $self->param('deck_id');
     my $card_id = $self->param('add_card');
+    my $qty     = $self->param('quantity') || 0;
 
     return "Need both a deck id and a card id" unless $deck_id && $card_id;
 
-    my $sth = $DBH->prepare("INSERT INTO deck_card_map (deck_id, card_id) VALUES (?, ?)");
-    $sth->execute( $deck_id, $card_id );
+    my $sth = $DBH->prepare("INSERT INTO deck_card_map (deck_id, card_id, quantity) VALUES (?, ?, ?)");
+    $sth->execute( $deck_id, $card_id, $qty );
 
     if ( $sth->err ) {
         return $sth->errstr;

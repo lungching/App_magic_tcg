@@ -34,7 +34,7 @@
       <input type="hidden" name="deck_name" id="deck_name" value="<%= $deck_name %>"/>
       Cards:<br/>
 % for my $card ( @$cards ) {
-       <div class="card_list"><%= $card->{card_name} %></div><br/>
+       <div class="card_list"><%= $card->{card_name} %> <%= $card->{quantity} %></div><br/>
 % }
     <br/><br/>
     <select id="add_card" name = "add_card">
@@ -42,5 +42,6 @@
             <option value="<%= $entry->{value} %>"><%= $entry->{name} %></option>
         % }
     </select>
+    <input type="text" name="quantity" id="quantity" size=3 value="1"/><button type="button" id="inc" onclick="var qty = $('#quantity'); var val = qty.attr('value'); val++; qty.attr('value', val);">+</button><button type="button" id="inc" onclick="var qty = $('#quantity'); var val = qty.attr('value'); val--; qty.attr('value', val);">-</button>
     <input type="submit" name="submit_new_card" id="submit_new_card" value="Add Card">
 </div>
