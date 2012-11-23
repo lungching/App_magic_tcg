@@ -1,0 +1,24 @@
+% layout 'default';
+% title 'Deck Info';
+
+<h2><%= uc($deck_name) %></h2>
+
+<div id="hand">
+% for my $img_path ( @$images ) {
+    <img name="library" style="display:none" width="187" height="267" src="<%= $img_path %>"/>
+% }
+</div>
+<table id="locations" border="1" width="100%">
+    <tr>
+        <th width="25%">Land</th>
+        <th width="25%">Battlefield</th>
+        <th width="25%">Graveyard</th>
+        <th width="25%">Exile</th>
+    </tr/>
+    <tr>
+        <td height="500px" id="land"></td>
+        <td id="battlefield"></td>
+        <td id="graveyard"></td>
+        <td id="exile"></td>
+    </tr>
+</table>
