@@ -1,7 +1,7 @@
 % layout 'default';
 % title 'Deck Info';
 
-<h2><%= uc($deck_name) %></h2>
+<h2><%= uc($deck_name) %></h2><input type="submit" name="draw" id="draw" onclick="draw_card(); return false;" value="Draw"><select id="pull_card_select"></select><input type=submit name="pull_card" id="pull_card" onclick="; return false;" value="Pull Card">
 
 <div id="hand">
 % for my $img_path ( @$images ) {
