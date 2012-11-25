@@ -50,7 +50,7 @@ function populate_pull_list() {
     var pull_select = $('#pull_card_select');
     var options = '';
     for( var i = 0; i < library.length; i++) {
-        options += '<option value="' + library[i].src + '">' + library[i].src + '</option>';
+        options += '<option value="' + library[i].src + '">' + library[i].src.substring( library[i].src.lastIndexOf('/') + 1) + '</option>';
     }
     pull_select.html( options );
 }
