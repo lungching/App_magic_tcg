@@ -92,6 +92,7 @@ sub show_deck {
         image_path   => '',
         saved_result => '',
         cards        => $info->{cards},
+        sideboard    => $info->{sideboard},
         card_list    => $card_list,
     );
 
@@ -122,6 +123,11 @@ sub show_play_deck {
 #       { card_name => <name>, card_id => <id>, quantity => <quantity in deck>, },
 #       ...
 #   ],
+#   sideboard => [
+#       { card_name => <name>, card_id => <id>, quantity => <quantity in deck>, },
+#       { card_name => <name>, card_id => <id>, quantity => <quantity in deck>, },
+#       ...
+#   ],
 # }
 sub get_deck_info {
     my $name = shift;
@@ -132,7 +138,8 @@ sub get_deck_info {
         SELECT
             c.name,
             c.card_id,
-            m.quantity
+            m.quantity,
+            m.is_sideboard
         FROM
             deck d,
             deck_card_map m,
@@ -144,11 +151,18 @@ sub get_deck_info {
     ", undef, $info->{deck_id});
 
     my @cards;
+    my @sideboard;
     for my $card ( @$mapping ) {
-        push @cards, { card_name => $card->[0], card_id => $card->[1], quantity => $card->[2], };
+        if ( $card->[3] ) {
+            push @sideboard, { card_name => $card->[0], card_id => $card->[1], quantity => $card->[2], };
+        }
+        else {
+            push @cards, { card_name => $card->[0], card_id => $card->[1], quantity => $card->[2], };
+        }
     }
 
-    $info->{cards} = \@cards;
+    $info->{cards}     = \@cards;
+    $info->{sideboard} = \@sideboard;
 
     return $info;
 }
@@ -192,11 +206,12 @@ sub add_card {
     my $deck_id = $self->param('deck_id');
     my $card_id = $self->param('add_card');
     my $qty     = $self->param('quantity') || 0;
+    my $is_sb   = $self->param('is_sideboard') ? 1 : 0;
 
     return "Need both a deck id and a card id" unless $deck_id && $card_id;
 
-    my $sth = $DBH->prepare("INSERT INTO deck_card_map (deck_id, card_id, quantity) VALUES (?, ?, ?)");
-    $sth->execute( $deck_id, $card_id, $qty );
+    my $sth = $DBH->prepare("INSERT INTO deck_card_map (deck_id, card_id, quantity, is_sideboard) VALUES (?, ?, ?, ?)");
+    $sth->execute( $deck_id, $card_id, $qty, $is_sb );
 
     if ( $sth->err ) {
         return $sth->errstr;

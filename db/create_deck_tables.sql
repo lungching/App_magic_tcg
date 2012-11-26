@@ -7,5 +7,6 @@ CREATE TABLE deck (
 CREATE TABLE deck_card_map (
     deck_id INTEGER,
     card_id INTEGER,
-    quantity INTEGER
+    quantity INTEGER,
+    is_sideboard INTEGER
 );
