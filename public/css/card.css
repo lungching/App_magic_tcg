@@ -28,6 +28,17 @@
 }
 
 .card_list {
-    left:100px;
+    left:50px;
+    position:relative;
+}
+
+#sideboard {
+    left:600px;
+    top: 400px;
     position:absolute;
+    width:600px;
+}
+
+#cards {
+    width:700px;
 }

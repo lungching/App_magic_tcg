@@ -32,22 +32,27 @@
   <form id="deck_add" name "deck_add" method="POST">
       <input type="hidden" name="deck_id" id="deck_id" value="<%= $deck_id %>"/>
       <input type="hidden" name="deck_name" id="deck_name" value="<%= $deck_name %>"/>
-      Cards:<br/>
+      <select id="add_card" name = "add_card">
+          % for my $entry ( @$card_list ) {
+              <option value="<%= $entry->{value} %>"><%= $entry->{name} %></option>
+          % }
+      </select>
+      <input type="text" name="quantity" id="quantity" size=3 value="1"/><button type="button" id="inc" onclick="var qty = $('#quantity'); var val = qty.attr('value'); val++; qty.attr('value', val);">+</button><button type="button" id="inc" onclick="var qty = $('#quantity'); var val = qty.attr('value'); val--; qty.attr('value', val);">-</button>
+      <input type="checkbox" name="is_sideboard" id="is_sideboard" value="is_sideboard">Is Sideboard?</input>
+      <input type="submit" name="submit_new_card" id="submit_new_card" value="Add Card">
+      <br/><br/>
+      <div id="cards">
+           Cards:<br/>
 % for my $card ( @$cards ) {
-       <div class="card_list"><%= $card->{card_name} %> <%= $card->{quantity} %></div><br/>
+           <div class="card_list"><%= $card->{quantity} %> <%= $card->{card_name} %></div>
 % }
-    <br/><br/>
-      Sideboard:<br/>
+      </div>
+      <br/><br/>
+      <div id="sideboard">
+          Sideboard:<br/>
 % for my $card ( @$sideboard ) {
-       <div class="card_list"><%= $card->{card_name} %> <%= $card->{quantity} %></div><br/>
+          <div class="card_list"><%= $card->{quantity} %> <%= $card->{card_name} %></div>
 % }
-    <br/><br/>
-    <select id="add_card" name = "add_card">
-        % for my $entry ( @$card_list ) {
-            <option value="<%= $entry->{value} %>"><%= $entry->{name} %></option>
-        % }
-    </select>
-    <input type="text" name="quantity" id="quantity" size=3 value="1"/><button type="button" id="inc" onclick="var qty = $('#quantity'); var val = qty.attr('value'); val++; qty.attr('value', val);">+</button><button type="button" id="inc" onclick="var qty = $('#quantity'); var val = qty.attr('value'); val--; qty.attr('value', val);">-</button>
-    <input type="checkbox" name="is_sideboard" id="is_sideboard" value="is_sideboard">Is Sideboard?</input>
-    <input type="submit" name="submit_new_card" id="submit_new_card" value="Add Card">
+      </div>
+      <br/><br/>
 </div>
