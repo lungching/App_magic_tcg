@@ -119,13 +119,13 @@ sub show_play_deck {
 #   card_id => <id>,
 #   quantity => <num>,
 #   cards => [
-#       { card_name => <name>, card_id => <id>, quantity => <quantity in deck>, },
-#       { card_name => <name>, card_id => <id>, quantity => <quantity in deck>, },
+#       { card_name => <name>, card_id => <id>, quantity => <quantity in deck>, img_src => <path to image>, },
+#       { card_name => <name>, card_id => <id>, quantity => <quantity in deck>, img_src => <path to image>, },
 #       ...
 #   ],
 #   sideboard => [
-#       { card_name => <name>, card_id => <id>, quantity => <quantity in deck>, },
-#       { card_name => <name>, card_id => <id>, quantity => <quantity in deck>, },
+#       { card_name => <name>, card_id => <id>, quantity => <quantity in deck>, img_src => <path to image>, },
+#       { card_name => <name>, card_id => <id>, quantity => <quantity in deck>, img_src => <path to image>, },
 #       ...
 #   ],
 # }
@@ -153,11 +153,12 @@ sub get_deck_info {
     my @cards;
     my @sideboard;
     for my $card ( @$mapping ) {
+        my $card_img = "card_images/" . MagicScrape::Info::card_img_name( $card->[0] ) . ".jpeg";
         if ( $card->[3] ) {
-            push @sideboard, { card_name => $card->[0], card_id => $card->[1], quantity => $card->[2], };
+            push @sideboard, { card_name => $card->[0], card_id => $card->[1], quantity => $card->[2], img_src => $card_img, };
         }
         else {
-            push @cards, { card_name => $card->[0], card_id => $card->[1], quantity => $card->[2], };
+            push @cards, { card_name => $card->[0], card_id => $card->[1], quantity => $card->[2], img_src => $card_img, };
         }
     }
 

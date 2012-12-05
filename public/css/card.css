@@ -30,6 +30,7 @@
 .card_list {
     left:50px;
     position:relative;
+    width:300px;
 }
 
 #sideboard {
@@ -47,5 +48,10 @@
     left:400px;
     top: 200px;
     position:absolute;
-    /* width:600px; */
+}
+
+.deck_image {
+    left:1000px;
+    top: 250px;
+    position:fixed;
 }

@@ -46,13 +46,17 @@
       <div id="cards">
            Cards:<br/>
 % for my $card ( @$cards ) {
-           <div class="card_list"><%= $card->{quantity} %> <%= $card->{card_name} %></div>
+           <div class="card_list"><%= $card->{quantity} %> <%= $card->{card_name} %>
+             <img class="deck_image" style="display:none" src="<%= $card->{img_src} %>"/>
+           </div>
 % }
       </div>
       <div id="sideboard">
           Sideboard:<br/>
 % for my $card ( @$sideboard ) {
-          <div class="card_list"><%= $card->{quantity} %> <%= $card->{card_name} %></div>
+          <div class="card_list"><%= $card->{quantity} %> <%= $card->{card_name} %>
+             <img class="deck_image" style="display:none" src="<%= $card->{img_src} %>"/>
+          </div>
 % }
       </div>
       <br/><br/>
