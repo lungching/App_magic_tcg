@@ -31,9 +31,10 @@ sub admin {
         $self->new_deck();
     }
     elsif ( $self->param('search') ) {
-        my $found_deck = search_deck_name($self->param('deck_name'));
+        my $deck_name = search_for_deck($self->param('deck_id'));
 
-        if ( $found_deck ) {
+        if ( $deck_name ) {
+            $self->param( deck_name => $deck_name );
             $self->show_deck();
         }
         else {
@@ -55,10 +56,10 @@ sub admin {
     }
 }
 
-sub search_deck_name {
-    my $name = shift;
+sub search_for_deck {
+    my $id = shift;
 
-    my @found = $DBH->selectrow_array("SELECT COUNT(*) FROM deck WHERE name = ?", undef, $name);
+    my @found = $DBH->selectrow_array("SELECT name FROM deck WHERE deck_id = ?", undef, $id);
 
     return $found[0];
 }
@@ -66,6 +67,7 @@ sub search_deck_name {
 sub new_deck {
     my $self = shift;
 
+    ### TODO make sure the deck name doesn't exist
     my $sth = $DBH->prepare("INSERT INTO deck (name) VALUES ( ? )");
 
     $sth->execute( $self->param('deck_name') );
@@ -89,7 +91,6 @@ sub show_deck {
         deck_id      => $info->{deck_id},
         deck_name    => $info->{name},
         notes        => $info->{notes},
-        image_path   => '',
         saved_result => '',
         cards        => $info->{cards},
         sideboard    => $info->{sideboard},
@@ -102,7 +103,10 @@ sub show_deck {
 sub show_play_deck {
     my $self = shift;
 
-    my $info = get_deck_info( $self->param('deck_name') );
+    my ($deck_name) = $DBH->selectrow_array("SELECT name FROM deck WHERE deck_id = ?", undef, $self->param('deck_id'));
+    $self->param('deck_name', $deck_name);
+
+    my $info = get_deck_info( $deck_name );
     my $image_list = $self->get_images();
 
     $self->stash(
@@ -174,12 +178,13 @@ sub save_deck_info {
     my $sth = $DBH->prepare("
         UPDATE deck
         SET
+            name = ?,
             notes = ?
         WHERE
             deck_id = ?
     ");
 
-    $sth->execute( $self->param('notes'), $self->param('deck_id') );
+    $sth->execute( $self->param('deck_name'), $self->param('notes'), $self->param('deck_id') );
 
     if ( $sth->err ) {
         return $sth->errstr;
@@ -196,6 +201,18 @@ sub get_card_list {
 
     while ( my $row = $sth->fetchrow_hashref ) {
         push @list, { name => $row->{name}, value => $row->{card_id}, };
+    }
+
+    return \@list;
+}
+
+sub get_deck_list {
+    my $sth = $DBH->prepare("SELECT deck_id, name FROM deck ORDER BY name");
+    $sth->execute();
+    my @list;
+
+    while ( my $row = $sth->fetchrow_hashref ) {
+        push @list, { name => $row->{name}, value => $row->{deck_id}, };
     }
 
     return \@list;

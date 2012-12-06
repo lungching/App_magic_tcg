@@ -6,5 +6,12 @@
 % }
 
 <form name="deck" action="deck" method="post">
-     Deck: <input type="text" name="deck_name" id="deck_name"/> <input type="submit" name="search" id="search" value="Search"/> or <input type="submit" name="new_deck" id="new_deck" value="New Deck">
+    Deck: <select id="deck_name_select" name = "deck_id">
+        % for my $entry ( @$deck_list ) {
+           <option value="<%= $entry->{value} %>"><%= $entry->{name} %></option>
+        % }
+    </select>
+    <input type="submit" name="search" id="search" value="Search"/>
+    <br/>
+    <input type="text" name="deck_name" id="deck_name"/> <input type="submit" name="new_deck" id="new_deck" value="New Deck">
 </form>

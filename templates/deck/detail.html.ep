@@ -2,7 +2,22 @@
 % title 'Deck Info';
 
 <h2><%= uc($deck_name) %></h2>
-<img id="card_img" src="<%= $image_path %>"/>
+<form name="play_test" action="deck" method="post" target="_blank">
+    <input type="hidden" name="deck_id" id="deck_id" value="<%= $deck_id %>"/>
+    <input type="submit" name="play" value="Play Test"/>
+</form>
+<div class='deck_search'>
+  <form name="deck" action="deck" method="post">
+      Deck: <select id="deck_name_select" name = "deck_id">
+          % for my $entry ( @$deck_list ) {
+             <option value="<%= $entry->{value} %>"><%= $entry->{name} %></option>
+          % }
+      </select>
+      <input type="submit" name="search" id="search" value="Search"/>
+      <br/>
+      <input type="text" name="deck_name" id="deck_name"/> <input type="submit" name="new_deck" id="new_deck" value="New Deck">
+  </form>
+</div>
 <br/>
 <br/>
 <div id="deck_info" name="deck_info">
@@ -10,7 +25,6 @@
       <input type="hidden" name="deck_id" id="deck_id" value="<%= $deck_id %>"/>
       Name:
       <input type="text" name="deck_name" id="deck_name" value="<%= $deck_name %>"/>
-      <input type="submit" name="search" id="search" value="Search"/>
       <br/>
       <br/>
       Notes:<br/>
