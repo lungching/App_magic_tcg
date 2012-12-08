@@ -54,13 +54,12 @@
         <input type="text" name="quantity" id="quantity" size=3 value="1"/><button type="button" id="inc" onclick="var qty = $('#quantity'); var val = qty.attr('value'); val++; qty.attr('value', val);">+</button><button type="button" id="inc" onclick="var qty = $('#quantity'); var val = qty.attr('value'); val--; qty.attr('value', val);">-</button>
         <input type="checkbox" name="is_sideboard" id="is_sideboard" value="is_sideboard">Is Sideboard?</input>
         <input type="submit" name="submit_new_card" id="submit_new_card" value="Add Card">
-    </form>
   </div>
       <br/><br/>
       <div id="cards">
            Cards:<br/>
 % for my $card ( @$cards ) {
-           <div class="card_list"><%= $card->{quantity} %> <%= $card->{card_name} %>
+           <div class="card_list"><input type="checkbox" name="delete_card" value="<%= $card->{map_id} %>"/><%= $card->{quantity} %> <%= $card->{card_name} %>
              <img class="deck_image" style="display:none" src="<%= $card->{img_src} %>"/>
            </div>
 % }
@@ -68,10 +67,12 @@
       <div id="sideboard">
           Sideboard:<br/>
 % for my $card ( @$sideboard ) {
-          <div class="card_list"><%= $card->{quantity} %> <%= $card->{card_name} %>
+          <div class="card_list"><input type="checkbox" name="delete_card" value="<%= $card->{map_id} %>"/><%= $card->{quantity} %> <%= $card->{card_name} %>
              <img class="deck_image" style="display:none" src="<%= $card->{img_src} %>"/>
           </div>
 % }
       </div>
+      <input type="submit" name="delete_card_submit" value="Delete">
+    </form>
       <br/><br/>
 </div>

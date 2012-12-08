@@ -51,6 +51,11 @@ sub admin {
         $self->stash( saved_result => $saved_result );
         $self->show_deck();
     }
+    elsif ( $self->param('delete_card_submit') ) {
+        my $saved_result = $self->delete_card();
+        $self->stash( saved_result => $saved_result );
+        $self->show_deck();
+    }
     elsif ( $self->param('play') ) {
         $self->show_play_deck();
     }
@@ -123,16 +128,17 @@ sub show_play_deck {
 #   card_id => <id>,
 #   quantity => <num>,
 #   cards => [
-#       { card_name => <name>, card_id => <id>, quantity => <quantity in deck>, img_src => <path to image>, },
-#       { card_name => <name>, card_id => <id>, quantity => <quantity in deck>, img_src => <path to image>, },
+#       { card_name => <name>, card_id => <id>, quantity => <quantity in deck>, img_src => <path to image>, map_id => <map_id>, },
+#       { card_name => <name>, card_id => <id>, quantity => <quantity in deck>, img_src => <path to image>, map_id => <map_id>, },
 #       ...
 #   ],
 #   sideboard => [
-#       { card_name => <name>, card_id => <id>, quantity => <quantity in deck>, img_src => <path to image>, },
-#       { card_name => <name>, card_id => <id>, quantity => <quantity in deck>, img_src => <path to image>, },
+#       { card_name => <name>, card_id => <id>, quantity => <quantity in deck>, img_src => <path to image>, map_id => <map_id>, },
+#       { card_name => <name>, card_id => <id>, quantity => <quantity in deck>, img_src => <path to image>, map_id => <map_id>, },
 #       ...
 #   ],
 # }
+
 sub get_deck_info {
     my $name = shift;
 
@@ -143,7 +149,8 @@ sub get_deck_info {
             c.name,
             c.card_id,
             m.quantity,
-            m.is_sideboard
+            m.is_sideboard,
+            m.map_id
         FROM
             deck d,
             deck_card_map m,
@@ -159,10 +166,10 @@ sub get_deck_info {
     for my $card ( @$mapping ) {
         my $card_img = "card_images/" . MagicScrape::Info::card_img_name( $card->[0] ) . ".jpeg";
         if ( $card->[3] ) {
-            push @sideboard, { card_name => $card->[0], card_id => $card->[1], quantity => $card->[2], img_src => $card_img, };
+            push @sideboard, { card_name => $card->[0], card_id => $card->[1], quantity => $card->[2], img_src => $card_img, map_id => $card->[4], };
         }
         else {
-            push @cards, { card_name => $card->[0], card_id => $card->[1], quantity => $card->[2], img_src => $card_img, };
+            push @cards, { card_name => $card->[0], card_id => $card->[1], quantity => $card->[2], img_src => $card_img, map_id => $card->[4], };
         }
     }
 
@@ -237,8 +244,30 @@ sub add_card {
     else {
         return 1;
     }
-
 }
+
+sub delete_card {
+    my $self = shift;
+
+    my @map_ids = $self->param('delete_card');
+p(@map_ids);
+
+    return unless scalar @map_ids;
+
+    my $sth = $DBH->prepare("delete from deck_card_map where map_id = ?");
+
+    for my $map_id ( @map_ids ) {
+        $sth->execute( $map_id);
+    }
+
+    if ( $sth->err ) {
+        return $sth->errstr;
+    }
+    else {
+        return 1;
+    }
+}
+
 
 sub get_images {
     my $self = shift;

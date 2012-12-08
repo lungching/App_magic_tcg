@@ -5,6 +5,7 @@ CREATE TABLE deck (
 );
 
 CREATE TABLE deck_card_map (
+    map_id INTEGER PRIMARY KEY AUTOINCREMENT,
     deck_id INTEGER,
     card_id INTEGER,
     quantity INTEGER,
