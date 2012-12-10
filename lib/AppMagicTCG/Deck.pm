@@ -127,14 +127,16 @@ sub show_play_deck {
 #   card_name => <name>,
 #   card_id => <id>,
 #   quantity => <num>,
-#   cards => [
-#       { card_name => <name>, card_id => <id>, quantity => <quantity in deck>, img_src => <path to image>, map_id => <map_id>, },
-#       { card_name => <name>, card_id => <id>, quantity => <quantity in deck>, img_src => <path to image>, map_id => <map_id>, },
-#       ...
-#   ],
-#   sideboard => [
-#       { card_name => <name>, card_id => <id>, quantity => <quantity in deck>, img_src => <path to image>, map_id => <map_id>, },
-#       { card_name => <name>, card_id => <id>, quantity => <quantity in deck>, img_src => <path to image>, map_id => <map_id>, },
+#   < cards | sideboard > => { <type e.g. Creature > => [
+#       {
+#           card_name => <name>,
+#           card_id => <id>,
+#           quantity => <quantity in deck>,
+#           img_src => <path to image>,
+#           map_id => <map_id>,
+#           specific_mana => <integer>,
+#           generic_mana => [ <img src>, ... ],
+#       },
 #       ...
 #   ],
 # }
@@ -150,7 +152,10 @@ sub get_deck_info {
             c.card_id,
             m.quantity,
             m.is_sideboard,
-            m.map_id
+            m.map_id,
+            c.type,
+            c.generic_mana,
+            c.specific_mana
         FROM
             deck d,
             deck_card_map m,
@@ -161,20 +166,30 @@ sub get_deck_info {
             AND d.deck_id = ?
     ", undef, $info->{deck_id});
 
-    my @cards;
-    my @sideboard;
+    my %cards;
+    my %sideboard;
     for my $card ( @$mapping ) {
         my $card_img = "card_images/" . MagicScrape::Info::card_img_name( $card->[0] ) . ".jpeg";
+        my $specific_mana;
+        my $card_info = {
+            card_name => $card->[0],
+            card_id => $card->[1],
+            quantity => $card->[2],
+            img_src => $card_img,
+            map_id => $card->[4],
+            generic_mana => $card->[6],
+            specific_mana => $specific_mana,
+        };
         if ( $card->[3] ) {
-            push @sideboard, { card_name => $card->[0], card_id => $card->[1], quantity => $card->[2], img_src => $card_img, map_id => $card->[4], };
+            push @{ $sideboard{$card->[5]} }, $card_info;
         }
         else {
-            push @cards, { card_name => $card->[0], card_id => $card->[1], quantity => $card->[2], img_src => $card_img, map_id => $card->[4], };
+            push @{ $cards{ $card->[5]} }, $card_info;
         }
     }
 
-    $info->{cards}     = \@cards;
-    $info->{sideboard} = \@sideboard;
+    $info->{cards}     = \%cards;
+    $info->{sideboard} = \%sideboard;
 
     return $info;
 }
@@ -250,7 +265,6 @@ sub delete_card {
     my $self = shift;
 
     my @map_ids = $self->param('delete_card');
-p(@map_ids);
 
     return unless scalar @map_ids;
 
