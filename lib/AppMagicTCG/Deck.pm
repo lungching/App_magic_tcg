@@ -124,9 +124,6 @@ sub show_play_deck {
 
 
 # info = {
-#   card_name => <name>,
-#   card_id => <id>,
-#   quantity => <num>,
 #   < cards | sideboard > => { <type e.g. Creature > => [
 #       {
 #           card_name => <name>,
@@ -289,10 +286,12 @@ sub get_images {
     my $info = get_deck_info( $self->param('deck_name') );
     my @images;
 
-    for my $card ( @{ $info->{cards} } ) {
-        my $card_img = MagicScrape::Info::card_img_name( $card->{card_name} );
-        for (1..$card->{quantity}) {
-            push @images, "card_images/$card_img.jpeg";
+    for my $type ( keys %{ $info->{cards}  } ) {
+        for my $card ( @{ $info->{cards}{$type} } ) {
+            my $card_img = MagicScrape::Info::card_img_name( $card->{card_name} );
+            for (1..$card->{quantity}) {
+                push @images, "card_images/$card_img.jpeg";
+            }
         }
     }
 
