@@ -61,7 +61,7 @@
 % for my $type ( keys %$cards ) {
             == <%= $type %> ==<br/>
 %   for my $card ( @{ $cards->{ $type } } ) {
-            <div class="card_list"><input type="checkbox" name="delete_card" value="<%= $card->{map_id} %>"/><%= $card->{quantity} %> <%= $card->{card_name} %>
+            <div class="card_list"><input type="text" name="quantity_<%= $card->{map_id} %>" id="quantity_<%= $card->{map_id} %>" size=3 value="<%= $card->{quantity} %>"/><button type="button" id="inc" onclick="var qty = $('#quantity_<%= $card->{map_id} %>'); var val = qty.attr('value'); val++; qty.attr('value', val);">+</button><button type="button" id="inc" onclick="var qty = $('#quantity_<%= $card->{map_id} %>'); var val = qty.attr('value'); val--; qty.attr('value', val);">-</button><%= $card->{card_name} %>
               <img class="deck_image" style="display:none" src="<%= $card->{img_src} %>"/>
             </div>
 %   }
@@ -72,13 +72,13 @@
 % for my $type ( keys %$sideboard ) {
             == <%= $type %> ==<br/>
 %   for my $card ( @{ $sideboard->{ $type } } ) {
-          <div class="card_list"><input type="checkbox" name="delete_card" value="<%= $card->{map_id} %>"/><%= $card->{quantity} %> <%= $card->{card_name} %>
+          <div class="card_list"><input type="text" name="quantity_<%= $card->{map_id} %>" id="quantity_<%= $card->{map_id} %>" size=3 value="<%= $card->{quantity} %>"/><button type="button" id="inc" onclick="var qty = $('#quantity_<%= $card->{map_id} %>'); var val = qty.attr('value'); val++; qty.attr('value', val);">+</button><button type="button" id="inc" onclick="var qty = $('#quantity_<%= $card->{map_id} %>'); var val = qty.attr('value'); val--; qty.attr('value', val);">-</button><%= $card->{card_name} %>
              <img class="deck_image" style="display:none" src="<%= $card->{img_src} %>"/>
           </div>
 %   }
 % }
       </div>
-      <input type="submit" name="delete_card_submit" value="Delete">
+      <input type="submit" name="update_card_submit" value="Update">
     </form>
       <br/><br/>
 </div>

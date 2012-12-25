@@ -51,8 +51,8 @@ sub admin {
         $self->stash( saved_result => $saved_result );
         $self->show_deck();
     }
-    elsif ( $self->param('delete_card_submit') ) {
-        my $saved_result = $self->delete_card();
+    elsif ( $self->param('update_card_submit') ) {
+        my $saved_result = $self->update_map_qtys();
         $self->stash( saved_result => $saved_result );
         $self->show_deck();
     }
@@ -259,17 +259,10 @@ sub add_card {
 }
 
 sub delete_card {
-    my $self = shift;
+    my $id = shift;
 
-    my @map_ids = $self->param('delete_card');
-
-    return unless scalar @map_ids;
-
-    my $sth = $DBH->prepare("delete from deck_card_map where map_id = ?");
-
-    for my $map_id ( @map_ids ) {
-        $sth->execute( $map_id);
-    }
+    my $sth = $DBH->prepare("DELETE FROM deck_card_map WHERE map_id = ?");
+    $sth->execute( $id);
 
     if ( $sth->err ) {
         return $sth->errstr;
@@ -277,6 +270,31 @@ sub delete_card {
     else {
         return 1;
     }
+}
+
+sub update_map_qtys {
+    my $self = shift;
+
+    my @names = $self->param;
+    my $sth = $DBH->prepare("UPDATE deck_card_map SET quantity = ? WHERE map_id = ?");
+
+    for my $name ( @names ) {
+        my ($id) =  $name =~ /^quantity_(\d+)$/;
+        next unless $id;
+
+        if ( $self->param( $name ) > 0 ) {
+            $sth->execute( $self->param( $name ), $id);
+            if ( $sth->err ) {
+                return $sth->errstr;
+            }
+        }
+        else {
+            my $rt = delete_card( $id );
+            return $rt unless $rt == 1;
+        }
+    }
+
+    return 1;
 }
 
 
