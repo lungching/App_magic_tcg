@@ -1,5 +1,6 @@
 % layout 'default';
 % title 'Deck Info';
+% use List::Util qw( sum );
 
 <h2><%= uc($deck_name) %></h2>
 <form name="play_test" action="deck" method="post" target="_blank">
@@ -55,11 +56,11 @@
         <input type="checkbox" name="is_sideboard" id="is_sideboard" value="is_sideboard">Is Sideboard?</input>
         <input type="submit" name="submit_new_card" id="submit_new_card" value="Add Card">
   </div>
-      <br/><br/>
       <div id="cards">
-           Cards:<br/>
+           <h3>Cards (<%= $card_sum %>):</h3>
 % for my $type ( keys %$cards ) {
-            == <%= $type %> ==<br/>
+%   my $qty = sum( map { $_->{quantity} } @{ $cards->{ $type } } ); 
+            <h4><%= $type %> (<%= $qty %>)</h4><hr width="25%" align="left"/>
 %   for my $card ( @{ $cards->{ $type } } ) {
             <div class="card_list"><input type="text" name="quantity_<%= $card->{map_id} %>" id="quantity_<%= $card->{map_id} %>" size=3 value="<%= $card->{quantity} %>"/><button type="button" id="inc" onclick="var qty = $('#quantity_<%= $card->{map_id} %>'); var val = qty.attr('value'); val++; qty.attr('value', val);">+</button><button type="button" id="inc" onclick="var qty = $('#quantity_<%= $card->{map_id} %>'); var val = qty.attr('value'); val--; qty.attr('value', val);">-</button><%= $card->{card_name} %>
               <img class="deck_image" style="display:none" src="<%= $card->{img_src} %>"/>
@@ -68,9 +69,10 @@
 % }
       </div>
       <div id="sideboard">
-          Sideboard:<br/>
+          <h3>Sideboard (<%= $sideboard_sum %>):<h3/>
 % for my $type ( keys %$sideboard ) {
-            == <%= $type %> ==<br/>
+%   my $qty = sum( map { $_->{quantity} } @{ $sideboard->{ $type } } ); 
+            <h4><%= $type %> (<%= $qty %>)</h4><hr width="25%" align="left"/>
 %   for my $card ( @{ $sideboard->{ $type } } ) {
           <div class="card_list"><input type="text" name="quantity_<%= $card->{map_id} %>" id="quantity_<%= $card->{map_id} %>" size=3 value="<%= $card->{quantity} %>"/><button type="button" id="inc" onclick="var qty = $('#quantity_<%= $card->{map_id} %>'); var val = qty.attr('value'); val++; qty.attr('value', val);">+</button><button type="button" id="inc" onclick="var qty = $('#quantity_<%= $card->{map_id} %>'); var val = qty.attr('value'); val--; qty.attr('value', val);">-</button><%= $card->{card_name} %>
              <img class="deck_image" style="display:none" src="<%= $card->{img_src} %>"/>

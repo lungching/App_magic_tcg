@@ -5,6 +5,7 @@ use DBD::SQLite;
 use Data::Printer;
 use MagicScrape::Info;
 use Carp qw( croak );
+use List::Util qw( sum );
 
 my $DBH;
 my $doc_root = '/home/mburns/projects/App_magic_tcg/';  # hard code for now TODO have the server find this
@@ -93,13 +94,15 @@ sub show_deck {
     my $card_list = get_card_list();
 
     $self->stash(
-        deck_id      => $info->{deck_id},
-        deck_name    => $info->{name},
-        notes        => $info->{notes},
-        saved_result => '',
-        cards        => $info->{cards},
-        sideboard    => $info->{sideboard},
-        card_list    => $card_list,
+        deck_id       => $info->{deck_id},
+        deck_name     => $info->{name},
+        notes         => $info->{notes},
+        saved_result  => '',
+        cards         => $info->{cards},
+        sideboard     => $info->{sideboard},
+        card_list     => $card_list,
+        card_sum      => $info->{card_sum},
+        sideboard_sum => $info->{sideboard_sum},
     );
 
     $self->render('deck/detail');
@@ -163,6 +166,11 @@ sub get_deck_info {
             AND d.deck_id = ?
     ", undef, $info->{deck_id});
 
+    my $card_sum = $DBH->selectall_arrayref("SELECT SUM(quantity) FROM deck_card_map WHERE is_sideboard = 0 AND deck_id = ?", undef, $info->{deck_id});
+    $card_sum    = $card_sum->[0][0];
+    my $sb_sum   = $DBH->selectall_arrayref("SELECT SUM(quantity) FROM deck_card_map WHERE is_sideboard = 1 AND deck_id = ?", undef, $info->{deck_id});
+    $sb_sum      = $sb_sum->[0][0];
+
     my %cards;
     my %sideboard;
     for my $card ( @$mapping ) {
@@ -185,8 +193,10 @@ sub get_deck_info {
         }
     }
 
-    $info->{cards}     = \%cards;
-    $info->{sideboard} = \%sideboard;
+    $info->{cards}         = \%cards;
+    $info->{sideboard}     = \%sideboard;
+    $info->{card_sum}      = $card_sum;
+    $info->{sideboard_sum} = $sb_sum;
 
     return $info;
 }
