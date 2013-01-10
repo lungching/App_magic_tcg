@@ -10,7 +10,7 @@ $card_app->init( { "dsn" => "dbi:SQLite:dbname=db/test.db" } );
 $card_app->clear_db();
 
 my $t = Test::Mojo->new( AppMagicTCG->new( conf_file => 'conf/db_test_conf.json' ) );
-$t->get_ok('/')->status_is(200)->content_like(qr/Mojolicious/i);
+$t->get_ok('/')->status_is(200)->content_like(qr/<title>Magic<\/title>/);
 $t->get_ok('/card')->status_is(200)->content_like(qr/<input type="text" name="name"/i);
 
 my $params = {

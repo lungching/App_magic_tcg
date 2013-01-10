@@ -61,7 +61,7 @@ sub get_general_info {
                                                                                       \((\d+)\)    # converted mana cost
                                                                                     /x;
 
-    # if there is only generic mana it gets picked up as specific mana
+    # if there is only generic mana it gets picked up as specific mana so needs to be fixed
     if ( ! $generic_mana && $specific_mana =~ /^\d+$/ ) {
         $generic_mana = $specific_mana;
         $specific_mana = undef;
