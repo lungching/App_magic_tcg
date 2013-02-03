@@ -57,7 +57,12 @@
 }
 
 .deck_search {
-    left:1000px;
+    left:900px;
     top: 25px;
     position:fixed;
+}
+
+.shortcut_buttons {
+    left: 220px;
+    position:relative;
 }

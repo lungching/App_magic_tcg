@@ -47,6 +47,10 @@
     <form id="deck_add" name "deck_add" method="POST">
         <input type="hidden" name="deck_id" id="deck_id" value="<%= $deck_id %>"/>
         <input type="hidden" name="deck_name" id="deck_name" value="<%= $deck_name %>"/>
+        <div class="shortcut_buttons">
+        <button type="button" id="add_three" onclick="var qty = $('#quantity'); qty.attr('value',3);">3</button>
+        <button type="button" id="add_four"  onclick="var qty = $('#quantity'); qty.attr('value',4);">4</button>
+        </div>
         <select id="add_card" name = "add_card">
             % for my $entry ( @$card_list ) {
                 <option value="<%= $entry->{value} %>"><%= $entry->{name} %></option>

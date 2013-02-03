@@ -134,6 +134,7 @@ sub card_img_name {
     $card_entry =~ s/,//g;
     $card_entry = lc($card_entry);
 
+# p($card_entry);
     return $card_entry;
 }
 
